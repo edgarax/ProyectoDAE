@@ -70,8 +70,12 @@ public class Usuario implements Serializable {
     private Date fechaModificacion;
     @Column(name = "usuarioModificacion")
     private Integer usuarioModificacion;
-    @OneToMany(mappedBy = "usuarioModificacion")
+    @OneToMany(mappedBy = "idUsuario")
     private Collection<Movimiento> movimientoCollection;
+    @OneToMany(mappedBy = "idCliente")
+    private Collection<Movimiento> movimientoCollection1;
+    @OneToMany(mappedBy = "usuarioModificacion")
+    private Collection<Movimiento> movimientoCollection2;
     @OneToMany(mappedBy = "usuarioCreacion")
     private Collection<Producto> productoCollection;
     @OneToMany(mappedBy = "usuarioModificacion")
@@ -171,6 +175,24 @@ public class Usuario implements Serializable {
 
     public void setMovimientoCollection(Collection<Movimiento> movimientoCollection) {
         this.movimientoCollection = movimientoCollection;
+    }
+
+    @XmlTransient
+    public Collection<Movimiento> getMovimientoCollection1() {
+        return movimientoCollection1;
+    }
+
+    public void setMovimientoCollection1(Collection<Movimiento> movimientoCollection1) {
+        this.movimientoCollection1 = movimientoCollection1;
+    }
+
+    @XmlTransient
+    public Collection<Movimiento> getMovimientoCollection2() {
+        return movimientoCollection2;
+    }
+
+    public void setMovimientoCollection2(Collection<Movimiento> movimientoCollection2) {
+        this.movimientoCollection2 = movimientoCollection2;
     }
 
     @XmlTransient

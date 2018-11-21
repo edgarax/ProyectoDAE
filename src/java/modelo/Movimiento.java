@@ -39,8 +39,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Movimiento.findByDescripcion", query = "SELECT m FROM Movimiento m WHERE m.descripcion = :descripcion")
     , @NamedQuery(name = "Movimiento.findByFecha", query = "SELECT m FROM Movimiento m WHERE m.fecha = :fecha")
     , @NamedQuery(name = "Movimiento.findByTipo", query = "SELECT m FROM Movimiento m WHERE m.tipo = :tipo")
-    , @NamedQuery(name = "Movimiento.findByIdUsuario", query = "SELECT m FROM Movimiento m WHERE m.idUsuario = :idUsuario")
-    , @NamedQuery(name = "Movimiento.findByIdCliente", query = "SELECT m FROM Movimiento m WHERE m.idCliente = :idCliente")
     , @NamedQuery(name = "Movimiento.findByOrigenDestino", query = "SELECT m FROM Movimiento m WHERE m.origenDestino = :origenDestino")
     , @NamedQuery(name = "Movimiento.findByFechaModificacion", query = "SELECT m FROM Movimiento m WHERE m.fechaModificacion = :fechaModificacion")})
 public class Movimiento implements Serializable {
@@ -58,15 +56,17 @@ public class Movimiento implements Serializable {
     private Date fecha;
     @Column(name = "tipo")
     private String tipo;
-    @Column(name = "id_usuario")
-    private Integer idUsuario;
-    @Column(name = "id_cliente")
-    private Integer idCliente;
     @Column(name = "origenDestino")
     private String origenDestino;
     @Column(name = "fechaModificacion")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaModificacion;
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
+    @ManyToOne
+    private Usuario idUsuario;
+    @JoinColumn(name = "id_cliente", referencedColumnName = "id_usuario")
+    @ManyToOne
+    private Usuario idCliente;
     @JoinColumn(name = "usuarioModificacion", referencedColumnName = "id_usuario")
     @ManyToOne
     private Usuario usuarioModificacion;
@@ -112,22 +112,6 @@ public class Movimiento implements Serializable {
         this.tipo = tipo;
     }
 
-    public Integer getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(Integer idUsuario) {
-        this.idUsuario = idUsuario;
-    }
-
-    public Integer getIdCliente() {
-        return idCliente;
-    }
-
-    public void setIdCliente(Integer idCliente) {
-        this.idCliente = idCliente;
-    }
-
     public String getOrigenDestino() {
         return origenDestino;
     }
@@ -142,6 +126,22 @@ public class Movimiento implements Serializable {
 
     public void setFechaModificacion(Date fechaModificacion) {
         this.fechaModificacion = fechaModificacion;
+    }
+
+    public Usuario getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(Usuario idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+    public Usuario getIdCliente() {
+        return idCliente;
+    }
+
+    public void setIdCliente(Usuario idCliente) {
+        this.idCliente = idCliente;
     }
 
     public Usuario getUsuarioModificacion() {

@@ -36,8 +36,10 @@ public static LinkedList<Movimiento> consultarMovimientos() throws SQLException{
         movimiento.setDescripcion(rs.getString("descripcion"));
         movimiento.setFecha(rs.getTimestamp("fecha"));
         movimiento.setTipo(rs.getString("tipo"));
-        movimiento.setIdUsuario(rs.getInt("id_usuario"));
-        movimiento.setIdCliente(rs.getInt("id_cliente"));
+        Usuario usuario = ujpa.findUsuario(rs.getInt("id_usuario"));
+        movimiento.setIdUsuario(usuario);
+        Usuario cliente = ujpa.findUsuario(rs.getInt("id_cliente"));
+        movimiento.setIdCliente(cliente);
         movimiento.setOrigenDestino(rs.getString("origenDestino"));
         movimiento.setFechaModificacion(rs.getTimestamp("fechaModificacion"));
         Usuario usu = ujpa.findUsuario(rs.getInt("usuarioModificacion"));
