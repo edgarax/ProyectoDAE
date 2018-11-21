@@ -39,6 +39,12 @@ public class UsuarioJpaController implements Serializable {
         if (usuario.getMovimientoCollection() == null) {
             usuario.setMovimientoCollection(new ArrayList<Movimiento>());
         }
+        if (usuario.getMovimientoCollection1() == null) {
+            usuario.setMovimientoCollection1(new ArrayList<Movimiento>());
+        }
+        if (usuario.getMovimientoCollection2() == null) {
+            usuario.setMovimientoCollection2(new ArrayList<Movimiento>());
+        }
         if (usuario.getProductoCollection() == null) {
             usuario.setProductoCollection(new ArrayList<Producto>());
         }
@@ -55,6 +61,18 @@ public class UsuarioJpaController implements Serializable {
                 attachedMovimientoCollection.add(movimientoCollectionMovimientoToAttach);
             }
             usuario.setMovimientoCollection(attachedMovimientoCollection);
+            Collection<Movimiento> attachedMovimientoCollection1 = new ArrayList<Movimiento>();
+            for (Movimiento movimientoCollection1MovimientoToAttach : usuario.getMovimientoCollection1()) {
+                movimientoCollection1MovimientoToAttach = em.getReference(movimientoCollection1MovimientoToAttach.getClass(), movimientoCollection1MovimientoToAttach.getIdMovimiento());
+                attachedMovimientoCollection1.add(movimientoCollection1MovimientoToAttach);
+            }
+            usuario.setMovimientoCollection1(attachedMovimientoCollection1);
+            Collection<Movimiento> attachedMovimientoCollection2 = new ArrayList<Movimiento>();
+            for (Movimiento movimientoCollection2MovimientoToAttach : usuario.getMovimientoCollection2()) {
+                movimientoCollection2MovimientoToAttach = em.getReference(movimientoCollection2MovimientoToAttach.getClass(), movimientoCollection2MovimientoToAttach.getIdMovimiento());
+                attachedMovimientoCollection2.add(movimientoCollection2MovimientoToAttach);
+            }
+            usuario.setMovimientoCollection2(attachedMovimientoCollection2);
             Collection<Producto> attachedProductoCollection = new ArrayList<Producto>();
             for (Producto productoCollectionProductoToAttach : usuario.getProductoCollection()) {
                 productoCollectionProductoToAttach = em.getReference(productoCollectionProductoToAttach.getClass(), productoCollectionProductoToAttach.getIdProducto());
@@ -69,12 +87,30 @@ public class UsuarioJpaController implements Serializable {
             usuario.setProductoCollection1(attachedProductoCollection1);
             em.persist(usuario);
             for (Movimiento movimientoCollectionMovimiento : usuario.getMovimientoCollection()) {
-                Usuario oldUsuarioModificacionOfMovimientoCollectionMovimiento = movimientoCollectionMovimiento.getUsuarioModificacion();
-                movimientoCollectionMovimiento.setUsuarioModificacion(usuario);
+                Usuario oldIdUsuarioOfMovimientoCollectionMovimiento = movimientoCollectionMovimiento.getIdUsuario();
+                movimientoCollectionMovimiento.setIdUsuario(usuario);
                 movimientoCollectionMovimiento = em.merge(movimientoCollectionMovimiento);
-                if (oldUsuarioModificacionOfMovimientoCollectionMovimiento != null) {
-                    oldUsuarioModificacionOfMovimientoCollectionMovimiento.getMovimientoCollection().remove(movimientoCollectionMovimiento);
-                    oldUsuarioModificacionOfMovimientoCollectionMovimiento = em.merge(oldUsuarioModificacionOfMovimientoCollectionMovimiento);
+                if (oldIdUsuarioOfMovimientoCollectionMovimiento != null) {
+                    oldIdUsuarioOfMovimientoCollectionMovimiento.getMovimientoCollection().remove(movimientoCollectionMovimiento);
+                    oldIdUsuarioOfMovimientoCollectionMovimiento = em.merge(oldIdUsuarioOfMovimientoCollectionMovimiento);
+                }
+            }
+            for (Movimiento movimientoCollection1Movimiento : usuario.getMovimientoCollection1()) {
+                Usuario oldIdClienteOfMovimientoCollection1Movimiento = movimientoCollection1Movimiento.getIdCliente();
+                movimientoCollection1Movimiento.setIdCliente(usuario);
+                movimientoCollection1Movimiento = em.merge(movimientoCollection1Movimiento);
+                if (oldIdClienteOfMovimientoCollection1Movimiento != null) {
+                    oldIdClienteOfMovimientoCollection1Movimiento.getMovimientoCollection1().remove(movimientoCollection1Movimiento);
+                    oldIdClienteOfMovimientoCollection1Movimiento = em.merge(oldIdClienteOfMovimientoCollection1Movimiento);
+                }
+            }
+            for (Movimiento movimientoCollection2Movimiento : usuario.getMovimientoCollection2()) {
+                Usuario oldUsuarioModificacionOfMovimientoCollection2Movimiento = movimientoCollection2Movimiento.getUsuarioModificacion();
+                movimientoCollection2Movimiento.setUsuarioModificacion(usuario);
+                movimientoCollection2Movimiento = em.merge(movimientoCollection2Movimiento);
+                if (oldUsuarioModificacionOfMovimientoCollection2Movimiento != null) {
+                    oldUsuarioModificacionOfMovimientoCollection2Movimiento.getMovimientoCollection2().remove(movimientoCollection2Movimiento);
+                    oldUsuarioModificacionOfMovimientoCollection2Movimiento = em.merge(oldUsuarioModificacionOfMovimientoCollection2Movimiento);
                 }
             }
             for (Producto productoCollectionProducto : usuario.getProductoCollection()) {
@@ -111,6 +147,10 @@ public class UsuarioJpaController implements Serializable {
             Usuario persistentUsuario = em.find(Usuario.class, usuario.getIdUsuario());
             Collection<Movimiento> movimientoCollectionOld = persistentUsuario.getMovimientoCollection();
             Collection<Movimiento> movimientoCollectionNew = usuario.getMovimientoCollection();
+            Collection<Movimiento> movimientoCollection1Old = persistentUsuario.getMovimientoCollection1();
+            Collection<Movimiento> movimientoCollection1New = usuario.getMovimientoCollection1();
+            Collection<Movimiento> movimientoCollection2Old = persistentUsuario.getMovimientoCollection2();
+            Collection<Movimiento> movimientoCollection2New = usuario.getMovimientoCollection2();
             Collection<Producto> productoCollectionOld = persistentUsuario.getProductoCollection();
             Collection<Producto> productoCollectionNew = usuario.getProductoCollection();
             Collection<Producto> productoCollection1Old = persistentUsuario.getProductoCollection1();
@@ -122,6 +162,20 @@ public class UsuarioJpaController implements Serializable {
             }
             movimientoCollectionNew = attachedMovimientoCollectionNew;
             usuario.setMovimientoCollection(movimientoCollectionNew);
+            Collection<Movimiento> attachedMovimientoCollection1New = new ArrayList<Movimiento>();
+            for (Movimiento movimientoCollection1NewMovimientoToAttach : movimientoCollection1New) {
+                movimientoCollection1NewMovimientoToAttach = em.getReference(movimientoCollection1NewMovimientoToAttach.getClass(), movimientoCollection1NewMovimientoToAttach.getIdMovimiento());
+                attachedMovimientoCollection1New.add(movimientoCollection1NewMovimientoToAttach);
+            }
+            movimientoCollection1New = attachedMovimientoCollection1New;
+            usuario.setMovimientoCollection1(movimientoCollection1New);
+            Collection<Movimiento> attachedMovimientoCollection2New = new ArrayList<Movimiento>();
+            for (Movimiento movimientoCollection2NewMovimientoToAttach : movimientoCollection2New) {
+                movimientoCollection2NewMovimientoToAttach = em.getReference(movimientoCollection2NewMovimientoToAttach.getClass(), movimientoCollection2NewMovimientoToAttach.getIdMovimiento());
+                attachedMovimientoCollection2New.add(movimientoCollection2NewMovimientoToAttach);
+            }
+            movimientoCollection2New = attachedMovimientoCollection2New;
+            usuario.setMovimientoCollection2(movimientoCollection2New);
             Collection<Producto> attachedProductoCollectionNew = new ArrayList<Producto>();
             for (Producto productoCollectionNewProductoToAttach : productoCollectionNew) {
                 productoCollectionNewProductoToAttach = em.getReference(productoCollectionNewProductoToAttach.getClass(), productoCollectionNewProductoToAttach.getIdProducto());
@@ -139,18 +193,52 @@ public class UsuarioJpaController implements Serializable {
             usuario = em.merge(usuario);
             for (Movimiento movimientoCollectionOldMovimiento : movimientoCollectionOld) {
                 if (!movimientoCollectionNew.contains(movimientoCollectionOldMovimiento)) {
-                    movimientoCollectionOldMovimiento.setUsuarioModificacion(null);
+                    movimientoCollectionOldMovimiento.setIdUsuario(null);
                     movimientoCollectionOldMovimiento = em.merge(movimientoCollectionOldMovimiento);
                 }
             }
             for (Movimiento movimientoCollectionNewMovimiento : movimientoCollectionNew) {
                 if (!movimientoCollectionOld.contains(movimientoCollectionNewMovimiento)) {
-                    Usuario oldUsuarioModificacionOfMovimientoCollectionNewMovimiento = movimientoCollectionNewMovimiento.getUsuarioModificacion();
-                    movimientoCollectionNewMovimiento.setUsuarioModificacion(usuario);
+                    Usuario oldIdUsuarioOfMovimientoCollectionNewMovimiento = movimientoCollectionNewMovimiento.getIdUsuario();
+                    movimientoCollectionNewMovimiento.setIdUsuario(usuario);
                     movimientoCollectionNewMovimiento = em.merge(movimientoCollectionNewMovimiento);
-                    if (oldUsuarioModificacionOfMovimientoCollectionNewMovimiento != null && !oldUsuarioModificacionOfMovimientoCollectionNewMovimiento.equals(usuario)) {
-                        oldUsuarioModificacionOfMovimientoCollectionNewMovimiento.getMovimientoCollection().remove(movimientoCollectionNewMovimiento);
-                        oldUsuarioModificacionOfMovimientoCollectionNewMovimiento = em.merge(oldUsuarioModificacionOfMovimientoCollectionNewMovimiento);
+                    if (oldIdUsuarioOfMovimientoCollectionNewMovimiento != null && !oldIdUsuarioOfMovimientoCollectionNewMovimiento.equals(usuario)) {
+                        oldIdUsuarioOfMovimientoCollectionNewMovimiento.getMovimientoCollection().remove(movimientoCollectionNewMovimiento);
+                        oldIdUsuarioOfMovimientoCollectionNewMovimiento = em.merge(oldIdUsuarioOfMovimientoCollectionNewMovimiento);
+                    }
+                }
+            }
+            for (Movimiento movimientoCollection1OldMovimiento : movimientoCollection1Old) {
+                if (!movimientoCollection1New.contains(movimientoCollection1OldMovimiento)) {
+                    movimientoCollection1OldMovimiento.setIdCliente(null);
+                    movimientoCollection1OldMovimiento = em.merge(movimientoCollection1OldMovimiento);
+                }
+            }
+            for (Movimiento movimientoCollection1NewMovimiento : movimientoCollection1New) {
+                if (!movimientoCollection1Old.contains(movimientoCollection1NewMovimiento)) {
+                    Usuario oldIdClienteOfMovimientoCollection1NewMovimiento = movimientoCollection1NewMovimiento.getIdCliente();
+                    movimientoCollection1NewMovimiento.setIdCliente(usuario);
+                    movimientoCollection1NewMovimiento = em.merge(movimientoCollection1NewMovimiento);
+                    if (oldIdClienteOfMovimientoCollection1NewMovimiento != null && !oldIdClienteOfMovimientoCollection1NewMovimiento.equals(usuario)) {
+                        oldIdClienteOfMovimientoCollection1NewMovimiento.getMovimientoCollection1().remove(movimientoCollection1NewMovimiento);
+                        oldIdClienteOfMovimientoCollection1NewMovimiento = em.merge(oldIdClienteOfMovimientoCollection1NewMovimiento);
+                    }
+                }
+            }
+            for (Movimiento movimientoCollection2OldMovimiento : movimientoCollection2Old) {
+                if (!movimientoCollection2New.contains(movimientoCollection2OldMovimiento)) {
+                    movimientoCollection2OldMovimiento.setUsuarioModificacion(null);
+                    movimientoCollection2OldMovimiento = em.merge(movimientoCollection2OldMovimiento);
+                }
+            }
+            for (Movimiento movimientoCollection2NewMovimiento : movimientoCollection2New) {
+                if (!movimientoCollection2Old.contains(movimientoCollection2NewMovimiento)) {
+                    Usuario oldUsuarioModificacionOfMovimientoCollection2NewMovimiento = movimientoCollection2NewMovimiento.getUsuarioModificacion();
+                    movimientoCollection2NewMovimiento.setUsuarioModificacion(usuario);
+                    movimientoCollection2NewMovimiento = em.merge(movimientoCollection2NewMovimiento);
+                    if (oldUsuarioModificacionOfMovimientoCollection2NewMovimiento != null && !oldUsuarioModificacionOfMovimientoCollection2NewMovimiento.equals(usuario)) {
+                        oldUsuarioModificacionOfMovimientoCollection2NewMovimiento.getMovimientoCollection2().remove(movimientoCollection2NewMovimiento);
+                        oldUsuarioModificacionOfMovimientoCollection2NewMovimiento = em.merge(oldUsuarioModificacionOfMovimientoCollection2NewMovimiento);
                     }
                 }
             }
@@ -219,8 +307,18 @@ public class UsuarioJpaController implements Serializable {
             }
             Collection<Movimiento> movimientoCollection = usuario.getMovimientoCollection();
             for (Movimiento movimientoCollectionMovimiento : movimientoCollection) {
-                movimientoCollectionMovimiento.setUsuarioModificacion(null);
+                movimientoCollectionMovimiento.setIdUsuario(null);
                 movimientoCollectionMovimiento = em.merge(movimientoCollectionMovimiento);
+            }
+            Collection<Movimiento> movimientoCollection1 = usuario.getMovimientoCollection1();
+            for (Movimiento movimientoCollection1Movimiento : movimientoCollection1) {
+                movimientoCollection1Movimiento.setIdCliente(null);
+                movimientoCollection1Movimiento = em.merge(movimientoCollection1Movimiento);
+            }
+            Collection<Movimiento> movimientoCollection2 = usuario.getMovimientoCollection2();
+            for (Movimiento movimientoCollection2Movimiento : movimientoCollection2) {
+                movimientoCollection2Movimiento.setUsuarioModificacion(null);
+                movimientoCollection2Movimiento = em.merge(movimientoCollection2Movimiento);
             }
             Collection<Producto> productoCollection = usuario.getProductoCollection();
             for (Producto productoCollectionProducto : productoCollection) {

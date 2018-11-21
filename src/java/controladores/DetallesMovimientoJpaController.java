@@ -39,8 +39,8 @@ public class DetallesMovimientoJpaController implements Serializable {
         if (detallesMovimiento.getDetallesMovimientoPK() == null) {
             detallesMovimiento.setDetallesMovimientoPK(new DetallesMovimientoPK());
         }
-        detallesMovimiento.getDetallesMovimientoPK().setIdMovimiento(detallesMovimiento.getMovimiento().getIdMovimiento());
         detallesMovimiento.getDetallesMovimientoPK().setIdProducto(detallesMovimiento.getProducto().getIdProducto());
+        detallesMovimiento.getDetallesMovimientoPK().setIdMovimiento(detallesMovimiento.getMovimiento().getIdMovimiento());
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -78,8 +78,8 @@ public class DetallesMovimientoJpaController implements Serializable {
     }
 
     public void edit(DetallesMovimiento detallesMovimiento) throws NonexistentEntityException, Exception {
-        detallesMovimiento.getDetallesMovimientoPK().setIdMovimiento(detallesMovimiento.getMovimiento().getIdMovimiento());
         detallesMovimiento.getDetallesMovimientoPK().setIdProducto(detallesMovimiento.getProducto().getIdProducto());
+        detallesMovimiento.getDetallesMovimientoPK().setIdMovimiento(detallesMovimiento.getMovimiento().getIdMovimiento());
         EntityManager em = null;
         try {
             em = getEntityManager();

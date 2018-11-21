@@ -44,6 +44,16 @@ public class MovimientoJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            Usuario idUsuario = movimiento.getIdUsuario();
+            if (idUsuario != null) {
+                idUsuario = em.getReference(idUsuario.getClass(), idUsuario.getIdUsuario());
+                movimiento.setIdUsuario(idUsuario);
+            }
+            Usuario idCliente = movimiento.getIdCliente();
+            if (idCliente != null) {
+                idCliente = em.getReference(idCliente.getClass(), idCliente.getIdUsuario());
+                movimiento.setIdCliente(idCliente);
+            }
             Usuario usuarioModificacion = movimiento.getUsuarioModificacion();
             if (usuarioModificacion != null) {
                 usuarioModificacion = em.getReference(usuarioModificacion.getClass(), usuarioModificacion.getIdUsuario());
@@ -56,6 +66,14 @@ public class MovimientoJpaController implements Serializable {
             }
             movimiento.setDetallesMovimientoCollection(attachedDetallesMovimientoCollection);
             em.persist(movimiento);
+            if (idUsuario != null) {
+                idUsuario.getMovimientoCollection().add(movimiento);
+                idUsuario = em.merge(idUsuario);
+            }
+            if (idCliente != null) {
+                idCliente.getMovimientoCollection().add(movimiento);
+                idCliente = em.merge(idCliente);
+            }
             if (usuarioModificacion != null) {
                 usuarioModificacion.getMovimientoCollection().add(movimiento);
                 usuarioModificacion = em.merge(usuarioModificacion);
@@ -83,6 +101,10 @@ public class MovimientoJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Movimiento persistentMovimiento = em.find(Movimiento.class, movimiento.getIdMovimiento());
+            Usuario idUsuarioOld = persistentMovimiento.getIdUsuario();
+            Usuario idUsuarioNew = movimiento.getIdUsuario();
+            Usuario idClienteOld = persistentMovimiento.getIdCliente();
+            Usuario idClienteNew = movimiento.getIdCliente();
             Usuario usuarioModificacionOld = persistentMovimiento.getUsuarioModificacion();
             Usuario usuarioModificacionNew = movimiento.getUsuarioModificacion();
             Collection<DetallesMovimiento> detallesMovimientoCollectionOld = persistentMovimiento.getDetallesMovimientoCollection();
@@ -99,6 +121,14 @@ public class MovimientoJpaController implements Serializable {
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
+            if (idUsuarioNew != null) {
+                idUsuarioNew = em.getReference(idUsuarioNew.getClass(), idUsuarioNew.getIdUsuario());
+                movimiento.setIdUsuario(idUsuarioNew);
+            }
+            if (idClienteNew != null) {
+                idClienteNew = em.getReference(idClienteNew.getClass(), idClienteNew.getIdUsuario());
+                movimiento.setIdCliente(idClienteNew);
+            }
             if (usuarioModificacionNew != null) {
                 usuarioModificacionNew = em.getReference(usuarioModificacionNew.getClass(), usuarioModificacionNew.getIdUsuario());
                 movimiento.setUsuarioModificacion(usuarioModificacionNew);
@@ -111,6 +141,22 @@ public class MovimientoJpaController implements Serializable {
             detallesMovimientoCollectionNew = attachedDetallesMovimientoCollectionNew;
             movimiento.setDetallesMovimientoCollection(detallesMovimientoCollectionNew);
             movimiento = em.merge(movimiento);
+            if (idUsuarioOld != null && !idUsuarioOld.equals(idUsuarioNew)) {
+                idUsuarioOld.getMovimientoCollection().remove(movimiento);
+                idUsuarioOld = em.merge(idUsuarioOld);
+            }
+            if (idUsuarioNew != null && !idUsuarioNew.equals(idUsuarioOld)) {
+                idUsuarioNew.getMovimientoCollection().add(movimiento);
+                idUsuarioNew = em.merge(idUsuarioNew);
+            }
+            if (idClienteOld != null && !idClienteOld.equals(idClienteNew)) {
+                idClienteOld.getMovimientoCollection().remove(movimiento);
+                idClienteOld = em.merge(idClienteOld);
+            }
+            if (idClienteNew != null && !idClienteNew.equals(idClienteOld)) {
+                idClienteNew.getMovimientoCollection().add(movimiento);
+                idClienteNew = em.merge(idClienteNew);
+            }
             if (usuarioModificacionOld != null && !usuarioModificacionOld.equals(usuarioModificacionNew)) {
                 usuarioModificacionOld.getMovimientoCollection().remove(movimiento);
                 usuarioModificacionOld = em.merge(usuarioModificacionOld);
@@ -169,6 +215,16 @@ public class MovimientoJpaController implements Serializable {
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
+            }
+            Usuario idUsuario = movimiento.getIdUsuario();
+            if (idUsuario != null) {
+                idUsuario.getMovimientoCollection().remove(movimiento);
+                idUsuario = em.merge(idUsuario);
+            }
+            Usuario idCliente = movimiento.getIdCliente();
+            if (idCliente != null) {
+                idCliente.getMovimientoCollection().remove(movimiento);
+                idCliente = em.merge(idCliente);
             }
             Usuario usuarioModificacion = movimiento.getUsuarioModificacion();
             if (usuarioModificacion != null) {
