@@ -1,0 +1,141 @@
+/*Eliminamos los margenes y paddings que agrega el navegador por defecto */
+*{
+	padding: 0;
+	margin: 0;		
+	box-sizing:border-box;
+}
+
+/*Agregamos margenes inferiores a los parrafos*/
+p{
+	margin-bottom: 20px;
+}
+
+header{
+	background: rgba(0,0,0,0.1);
+	background-color:#898C8F;
+	width: 100%;
+	position: fixed;
+	z-index: 100;
+        top: 0;
+}
+
+.nav{
+	float: left; /*desplazamos el nav hacia la izquierda*/
+}
+
+.nav ul{
+	list-style: none;
+	overflow: hidden; /*Limpiamos errores de float*/	
+}
+
+/* Menu del lado izquierdo*/
+.nav ul li{
+	float: left;	
+	font-family: Arial, sans-serif;
+	font-size: 16px;	
+	transform: scale(0.9);
+	transition: .3s ease all;	
+}
+
+.nav ul li:hover{
+	transform: scale(1);
+}
+
+.nav ul li a{	
+	opacity: 0;
+	display: block;
+	/*Separa las letras*/	
+	padding:20px;	
+	color: #fff;
+	text-decoration: none;	
+	/*Color de letra de menu lado izquierdo*/
+	color:#000;
+}
+
+/*Menu del lado derecho*/
+/*Decorar todos los menus del mismo color etc*/
+.nav li a{
+	/*Le da solo el background al nav
+	background-color:#000;*/
+	color:#000;
+	text-decoration: none;
+	/* 10px altura y  15px largo*/
+	transition: .3s ease all;
+	padding: 10px 15px;
+	display: block;
+	transform: scale(0.9);	
+}
+
+/*POnerle el mismo hover a todos los menus*/
+.nav li a:hover{	
+	background-color: #3ead47;
+	color:white;	
+	border-radius: 15px;
+	transform: scale(1);	
+}
+
+/*Ocultar los submenus*/
+.nav li ul{
+	display: none;
+	position:absolute;
+	min-width: 20px;
+}
+
+/*Cuando seleccione un menu,
+despliega un submenu*/
+.nav li:hover > ul{
+	display: block;
+}		
+
+.dropdown .nav-pills{
+	opacity: 0;
+	float: right;
+	padding-right: 40px;	
+}
+
+p{
+	opacity: 0;
+}
+
+
+/*ANIMACIONES*/
+
+.nav ul li a {
+	animation: entradaTitulo 2s ease .4s forwards;
+}
+
+.dropdown .nav-pills{
+	animation: entradaTitulo 2s ease .4s forwards;	
+}
+
+p{
+	animation: entradaLetras 2s ease 2s forwards;	
+}
+
+@keyframes entradaTitulo{
+	from{
+		transform: translateY(-25px);
+		opacity: 0;
+	}
+	to{
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+@keyframes entradaLetras{
+	from{
+		transform: translateY(25px);
+		opacity: 0;
+	}
+	to{
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+
+.contenido{
+	padding-top: 120px;
+	padding-left: 50px;
+}
